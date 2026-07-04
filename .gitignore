@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+.npm/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Trabajo del usuario (vídeos) — no se versiona
+projects/*/raw/*
+projects/*/work*.mp4
+projects/*/comp/media/
+projects/*/music/*
+projects/*/transcript.json
+projects/*/transcript.srt
+outputs/
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.m4a
+
+# Render temporales de HyperFrames
+.hyperframes/
+*.tmp
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# El kit (biblioteca/) SI se versiona aunque sean videos/audios
+!biblioteca/**

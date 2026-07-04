@@ -1,0 +1,269 @@
+<!doctype html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════╗
+  ║  EDITOR FANTASMA · PLANTILLA DE COMPOSICIÓN PREMIUM (clip-agnóstica)        ║
+  ║  Estilo casa: liquid-glass claro + azul/blancos y naranja/blancos,         ║
+  ║  tipografía bold redondeada (Gabarito), blur-in, sheen, punch-ins y        ║
+  ║  subtítulos karaoke palabra a palabra.                                     ║
+  ║                                                                            ║
+  ║  CÓMO USARLA:                                                              ║
+  ║   1) Copia esta carpeta a projects/<job>/comp/.                            ║
+  ║   2) Pon tu rough cut como input-video.mp4 (o cambia el src del <video>).  ║
+  ║   3) Ajusta data-duration del #stage a la duración real del corte.         ║
+  ║   4) Rellena CADA tarjeta con TU texto y TUS tiempos (data-start /          ║
+  ║      data-duration y los tiempos del timeline GSAP abajo).                 ║
+  ║   5) Rellena los bloques CAPS-* con tus palabras/tiempos (o bórralos en     ║
+  ║      long-form, que usa los CC de YouTube).                                ║
+  ║   6) Render:  npx hyperframes render projects/<job>/comp -o ... -w 1       ║
+  ║      (con HYPERFRAMES_BROWSER_PATH apuntando a tu Chrome).                  ║
+  ║                                                                            ║
+  ║  Los textos/tiempos de aquí son EJEMPLO. Sustitúyelos siempre.             ║
+  ║  Fuentes: cárgalas por CDN (jsDelivr) o coloca .woff2 en comp/fonts/.       ║
+  ╚══════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* Fuentes por CDN (HyperFrames no las trae de serie). Alternativa: @font-face local en fonts/. */
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/gabarito@5/index.css');
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5/index.css');
+
+      :root{
+        --navy:#14224C; --navy-soft:#46588A;
+        --blue:#2D5BFF; --blue-deep:#1E3FB8;
+        --orange:#FF6B00; --orange-deep:#E05E00;
+        --glass:rgba(255,255,255,0.93);
+        --glass-brd:rgba(255,255,255,0.72);
+        --disp:'Gabarito','Baloo 2',sans-serif;
+      }
+      *{box-sizing:border-box;}
+      html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;
+        font-family:'Gabarito','Inter',ui-sans-serif,system-ui,sans-serif;}
+      #stage{position:relative;width:100%;height:100%;overflow:hidden;}
+      .video-wrapper{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:50% 44%;}
+      .video-wrapper video{width:100%;height:100%;object-fit:cover;}
+      .card-host{position:absolute;pointer-events:none;overflow:visible;}
+      .card-host .card{position:relative;width:100%;height:100%;}
+
+      /* ── tokens liquid-glass compartidos ── */
+      .glass{
+        position:relative;
+        background:linear-gradient(157deg, rgba(255,255,255,0.975) 0%, rgba(236,243,255,0.9) 100%);
+        -webkit-backdrop-filter:blur(8px) saturate(1.25);
+        backdrop-filter:blur(8px) saturate(1.25);
+        border:1.5px solid var(--glass-brd);
+        box-shadow:0 36px 84px rgba(20,34,76,0.40), 0 6px 16px rgba(20,34,76,0.16), inset 0 2px 0 rgba(255,255,255,1), inset 0 0 0 1px rgba(45,91,255,0.05), inset 0 -22px 38px rgba(45,91,255,0.06);
+        border-radius:34px;
+      }
+      /* destello (sheen) que cruza SOLO el panel de cristal al entrar */
+      .sheen-clip{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none;}
+      .sheen{position:absolute;top:0;bottom:0;left:0;width:55%;pointer-events:none;
+        background:linear-gradient(105deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.55) 48%,rgba(255,255,255,0) 100%);
+        transform:translateX(-180%) skewX(-12deg);mix-blend-mode:screen;}
+      .eyebrow{font-family:'Inter',sans-serif;font-weight:800;font-size:21px;letter-spacing:0.13em;
+        text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:11px;
+        border:2px solid rgba(45,91,255,0.38);border-radius:999px;padding:9px 18px;width:fit-content;}
+      .eyebrow .dot{width:11px;height:11px;border-radius:50%;background:var(--orange);
+        box-shadow:0 0 14px rgba(255,107,0,0.7);}
+      .disp{font-family:'Gabarito','Baloo 2',sans-serif;font-weight:800;color:var(--navy);line-height:0.96;letter-spacing:-0.01em;}
+      .pill{display:inline-flex;align-items:center;border-radius:999px;color:#fff;
+        font-family:'Gabarito','Baloo 2',sans-serif;font-weight:800;line-height:1;}
+      .pill-o{background:linear-gradient(180deg,#FFA24D,var(--orange));box-shadow:0 10px 26px rgba(255,107,0,0.5),inset 0 2px 0 rgba(255,255,255,0.5);}
+      .pill-b{background:linear-gradient(180deg,#5A8BFF,var(--blue));box-shadow:0 10px 26px rgba(45,91,255,0.5),inset 0 2px 0 rgba(255,255,255,0.45);}
+      .ico{display:flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;
+        font-family:'Gabarito',sans-serif;font-weight:900;}
+      .ico-b{background:linear-gradient(180deg,#5A8BFF,var(--blue));box-shadow:0 8px 20px rgba(45,91,255,0.45);}
+      .ico-o{background:linear-gradient(180deg,#FFA24D,var(--orange));box-shadow:0 8px 20px rgba(255,107,0,0.45);}
+      .mask{overflow:hidden;display:block;}
+      .mask .line{display:block;}
+
+      /* ── subtítulos karaoke (CAPS) — borra este bloque en long-form ── */
+      /* CAPS-CSS */
+      #captions{position:absolute;left:50%;bottom:140px;transform:translateX(-50%);width:1500px;height:210px;z-index:45;pointer-events:none;}
+      .capline{position:absolute;left:0;right:0;bottom:0;display:none;justify-content:center;align-items:flex-end;flex-wrap:wrap;gap:0.05em 0.24em;font-family:'Gabarito','Baloo 2',sans-serif;font-weight:900;font-size:66px;line-height:1.08;letter-spacing:-0.01em;}
+      .capword{display:inline-block;color:#fff;-webkit-text-stroke:2.5px rgba(8,14,36,0.6);paint-order:stroke fill;text-shadow:0 6px 22px rgba(0,0,0,0.55),0 2px 5px rgba(0,0,0,0.5);transform-origin:center bottom;}
+      /* /CAPS-CSS */
+    </style>
+  </head>
+  <body>
+    <!-- Ajusta data-duration a la duración real de tu corte. data-width/height: 1920x1080 (16:9) o 1080x1920 (9:16). -->
+    <div id="stage" data-composition-id="graphic-overlays" data-start="0" data-duration="12" data-fps="30" data-width="1920" data-height="1080">
+
+      <!-- Pista base: tu rough cut. Cambia el src por el nombre real de tu vídeo. -->
+      <div class="video-wrapper" id="video-wrap">
+        <video id="bg-video" src="input-video.mp4" muted playsinline data-start="0" data-duration="12" data-track-index="1"></video>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           ARCHETIPOS DE TARJETA (ejemplos). Duplica/borra/edita según tu guion.
+           - data-start / data-duration = cuándo aparece y cuánto dura (segundos).
+           - left/top/width/height = posición. NUNCA centro-centro tapando la cara.
+           Sustituye TODOS los textos de PLACEHOLDER por los tuyos.
+           ════════════════════════════════════════════════════════════════════ -->
+
+      <!-- A · LOWER-THIRD (nombre / idea). Abajo-derecha. -->
+      <div class="card-host clip" id="host-a" data-card-id="card-a" data-start="1.0" data-duration="2.7" data-track-index="2" style="left:1230px;top:360px;width:630px;height:330px;visibility:hidden;opacity:0;">
+        <div class="card" data-card-id="card-a"><div class="root" style="width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;">
+          <div class="glass" id="card-a-panel" style="padding:32px 40px;width:fit-content;">
+            <span class="eyebrow" id="card-a-eye"><i class="dot"></i>ETIQUETA</span>
+            <div id="card-a-head" class="disp" style="font-size:62px;margin-top:14px;">Título<br>aquí</div>
+            <span class="pill pill-o" id="card-a-pill" style="font-size:64px;padding:10px 30px 14px;margin-top:12px;">Clave</span>
+            <span class="sheen-clip"><span class="sheen" id="card-a-sheen"></span></span>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- B · STAT CARD (número grande + contador + barras). Arriba-derecha. -->
+      <div class="card-host clip" id="host-b" data-card-id="card-b" data-start="4.0" data-duration="3.0" data-track-index="2" style="left:1210px;top:60px;width:650px;height:330px;visibility:hidden;opacity:0;">
+        <div class="card" data-card-id="card-b"><div class="root" style="width:100%;height:100%;display:flex;align-items:flex-start;justify-content:flex-end;">
+          <div class="glass" id="card-b-panel" style="padding:28px 38px;width:fit-content;">
+            <span class="eyebrow" id="card-b-eye"><i class="dot"></i>DATO</span>
+            <div style="display:flex;align-items:baseline;gap:14px;margin-top:6px;">
+              <!-- El contador anima de data-from a 0; cambia el valor inicial abajo (bnum.v). -->
+              <span class="disp" id="card-b-num" style="font-size:142px;background:linear-gradient(180deg,#5A8BFF,var(--blue-deep));-webkit-background-clip:text;background-clip:text;color:transparent;">10</span>
+              <span class="disp" id="card-b-sub" style="font-size:34px;color:var(--navy-soft);">unidad<br>aquí</span>
+            </div>
+            <div id="card-b-bars" style="display:flex;align-items:flex-end;gap:10px;height:54px;margin-top:6px;">
+              <span class="bar" style="width:46px;height:40%;background:linear-gradient(180deg,#7AA0FF,var(--blue));border-radius:8px;"></span>
+              <span class="bar" style="width:46px;height:65%;background:linear-gradient(180deg,#7AA0FF,var(--blue));border-radius:8px;"></span>
+              <span class="bar" style="width:46px;height:30%;background:linear-gradient(180deg,#7AA0FF,var(--blue));border-radius:8px;"></span>
+              <span class="bar" style="width:46px;height:90%;background:linear-gradient(180deg,#FFA24D,var(--orange));border-radius:8px;box-shadow:0 0 18px rgba(255,107,0,0.45);"></span>
+              <span class="bar" style="width:46px;height:55%;background:linear-gradient(180deg,#7AA0FF,var(--blue));border-radius:8px;"></span>
+              <span class="bar" style="width:46px;height:75%;background:linear-gradient(180deg,#7AA0FF,var(--blue));border-radius:8px;"></span>
+            </div>
+            <span class="sheen-clip"><span class="sheen" id="card-b-sheen"></span></span>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- C · TÍTULO HERO (centrado arriba, sin tapar los ojos). Anillo + máscara de líneas. -->
+      <div class="card-host clip" id="host-c" data-card-id="card-c" data-start="7.0" data-duration="2.7" data-track-index="2" style="left:1000px;top:24px;width:900px;height:380px;visibility:hidden;opacity:0;">
+        <div class="card" data-card-id="card-c"><div class="root" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+          <div class="ring" id="card-c-ring" style="position:absolute;width:330px;height:330px;border-radius:50%;border:2.5px solid rgba(255,107,0,0.5);box-shadow:0 0 70px rgba(255,107,0,0.3),inset 0 0 70px rgba(255,107,0,0.12);opacity:0;"></div>
+          <div class="glass" id="card-c-panel" style="padding:30px 56px 36px;text-align:center;display:flex;flex-direction:column;align-items:center;">
+            <h1 class="disp" style="font-size:88px;font-weight:900;margin:0;">
+              <span class="mask"><span class="line" id="card-c-l1">LÍNEA UNO</span></span>
+              <span class="mask"><span class="line" id="card-c-l2" style="background:linear-gradient(90deg,var(--orange),#FFB04D);-webkit-background-clip:text;background-clip:text;color:transparent;">LÍNEA DOS</span></span>
+            </h1>
+            <div id="card-c-uline" style="height:6px;width:260px;border-radius:3px;margin-top:14px;background:linear-gradient(90deg,var(--orange),#FFB04D);box-shadow:0 4px 16px rgba(255,107,0,0.5);transform:scaleX(0);transform-origin:center;"></div>
+            <p id="card-c-sub" class="eyebrow" style="margin-top:14px;color:var(--blue);justify-content:center;">Subtítulo / fuente</p>
+            <span class="sheen-clip"><span class="sheen" id="card-c-sheen"></span></span>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- D · POP-UP / TOAST (confirmación). Abajo-izquierda. Duplícalo para más toasts. -->
+      <div class="card-host clip" id="host-d" data-card-id="card-d" data-start="9.5" data-duration="2.5" data-track-index="2" style="left:90px;top:760px;width:760px;height:170px;visibility:hidden;opacity:0;">
+        <div class="card" data-card-id="card-d"><div class="root" style="width:100%;height:100%;display:flex;align-items:center;justify-content:flex-start;">
+          <div class="glass" id="card-d-toast" style="display:flex;align-items:center;gap:22px;padding:24px 36px;border-radius:999px;width:fit-content;">
+            <span class="ico ico-b" id="card-d-ico" style="width:64px;height:64px;flex:0 0 64px;font-size:36px;">&#10003;</span>
+            <span class="disp" style="font-size:44px;white-space:nowrap;">Mensaje principal<br><span style="font-family:'Inter';font-weight:600;font-size:22px;color:var(--navy-soft);">línea secundaria</span></span>
+            <span class="sheen-clip"><span class="sheen" id="card-d-sheen"></span></span>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── Subtítulos karaoke. Una .capline por frase; cada palabra un .capword.
+           Rellena con tus palabras (de transcript.json). Borra TODO el bloque en long-form. ── -->
+      <!-- CAPS-HTML -->
+      <div id="captions">
+        <div class="capline" id="capl-0"><span class="capword" id="capw-0-0">palabra</span><span class="capword" id="capw-0-1">uno</span><span class="capword" id="capw-0-2">aquí</span></div>
+        <div class="capline" id="capl-1"><span class="capword" id="capw-1-0">y</span><span class="capword" id="capw-1-1">la</span><span class="capword" id="capw-1-2">siguiente</span></div>
+      </div>
+      <!-- /CAPS-HTML -->
+
+      <script src="vendor/gsap.min.js"></script>
+      <script>
+        (function(){
+          const tl = window.gsap.timeline({ paused:true });
+          const H = (id)=>'.card-host[data-card-id="'+id+'"]';
+          // sheen: entra por un lado y SALE limpio por el otro (lineal, no se para en el centro)
+          const sweep = (sel,t)=>{ tl.set(sel,{xPercent:-220},t); tl.to(sel,{xPercent:320,duration:0.75,ease:'none'},t); tl.set(sel,{xPercent:-220},t+0.78); };
+
+          // ── A · lower-third [ajusta los tiempos a tu guion] ──
+          tl.set(H('card-a'),{visibility:'visible'},1.0);
+          tl.fromTo(H('card-a'),{opacity:0},{opacity:1,duration:0.4,ease:'power2.out'},1.0);
+          tl.fromTo('#card-a-panel',{y:36,scale:0.9},{y:0,scale:1,duration:0.55,ease:'back.out(1.4)'},1.0);
+          tl.fromTo('#card-a-eye',{opacity:0,y:8},{opacity:1,y:0,duration:0.35,ease:'power2.out'},1.3);
+          tl.fromTo('#card-a-head',{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:'power2.out'},1.42);
+          tl.fromTo('#card-a-pill',{opacity:0,scale:0.5},{opacity:1,scale:1,duration:0.5,ease:'back.out(2)'},1.65);
+          tl.to('#card-a-pill',{scale:1.05,duration:0.5,ease:'sine.inOut',repeat:1,yoyo:true},2.3);
+          sweep('#card-a-sheen',1.8);
+          tl.to('#card-a-panel',{y:-7,duration:1.1,ease:'sine.inOut',repeat:1,yoyo:true},2.0);
+          tl.to(H('card-a'),{opacity:0,scale:0.9,y:-14,duration:0.33,ease:'power2.in'},3.37);
+          tl.set(H('card-a'),{visibility:'hidden'},3.7);
+
+          // ── B · stat card con contador (cambia bnum.v por tu número inicial) ──
+          tl.set(H('card-b'),{visibility:'visible'},4.0);
+          tl.fromTo(H('card-b'),{opacity:0},{opacity:1,duration:0.4,ease:'power2.out'},4.0);
+          tl.fromTo('#card-b-panel',{y:-30,scale:0.92},{y:0,scale:1,duration:0.5,ease:'back.out(1.4)'},4.0);
+          tl.fromTo('#card-b-eye',{opacity:0},{opacity:1,duration:0.35,ease:'power2.out'},4.2);
+          tl.fromTo('#card-b-num',{opacity:0,scale:0.4},{opacity:1,scale:1,duration:0.5,ease:'back.out(1.8)'},4.2);
+          var bnum={v:10};
+          tl.to(bnum,{v:0,duration:0.95,ease:'power1.inOut',snap:{v:1},onUpdate:function(){var e=document.getElementById('card-b-num');if(e)e.textContent=Math.round(bnum.v);}},4.35);
+          tl.fromTo('#card-b-sub',{opacity:0,x:10},{opacity:1,x:0,duration:0.4,ease:'power2.out'},4.4);
+          tl.fromTo('#card-b-bars .bar',{scaleY:0,transformOrigin:'50% 100%'},{scaleY:1,duration:0.45,ease:'power2.out',stagger:0.06},4.45);
+          tl.to('#card-b-bars .bar',{y:-5,duration:0.9,ease:'sine.inOut',stagger:{each:0.05,repeat:1,yoyo:true}},5.4);
+          sweep('#card-b-sheen',4.5);
+          tl.to(H('card-b'),{opacity:0,scale:0.9,y:-14,duration:0.33,ease:'power2.in'},6.67);
+          tl.set(H('card-b'),{visibility:'hidden'},7.0);
+
+          // ── C · título hero ──
+          tl.set(H('card-c'),{visibility:'visible'},7.0);
+          tl.fromTo(H('card-c'),{opacity:0},{opacity:1,duration:0.4,ease:'power2.out'},7.0);
+          tl.fromTo('#card-c-panel',{scale:0.9,y:10},{scale:1,y:0,duration:0.5,ease:'back.out(1.4)'},7.0);
+          tl.fromTo('#card-c-ring',{opacity:0,scale:0.7},{opacity:0.9,scale:1,duration:0.6,ease:'power2.out'},7.1);
+          tl.to('#card-c-ring',{scale:1.07,duration:0.55,ease:'sine.inOut'},7.85);
+          tl.to('#card-c-ring',{scale:1.0,duration:0.55,ease:'sine.inOut'},8.4);
+          tl.fromTo(['#card-c-l1','#card-c-l2'],{yPercent:120},{yPercent:0,duration:0.6,ease:'power3.out',stagger:0.12},7.35);
+          tl.fromTo('#card-c-sub',{opacity:0},{opacity:1,duration:0.4,ease:'power2.out'},7.8);
+          tl.fromTo('#card-c-uline',{scaleX:0},{scaleX:1,duration:0.5,ease:'power3.out'},7.55);
+          sweep('#card-c-sheen',7.6);
+          tl.to('#card-c-panel',{y:-6,duration:1.2,ease:'sine.inOut',repeat:1,yoyo:true},8.0);
+          tl.to(H('card-c'),{opacity:0,scale:1.06,duration:0.35,ease:'power2.in'},9.37);
+          tl.set(H('card-c'),{visibility:'hidden'},9.7);
+
+          // ── D · pop-up / toast ──
+          tl.set(H('card-d'),{visibility:'visible'},9.5);
+          tl.fromTo(H('card-d'),{opacity:0},{opacity:1,duration:0.4,ease:'power2.out'},9.5);
+          tl.fromTo('#card-d-toast',{opacity:0,x:-50,scale:0.92},{opacity:1,x:0,scale:1,duration:0.5,ease:'back.out(1.6)'},9.5);
+          tl.fromTo('#card-d-ico',{scale:0},{scale:1,duration:0.4,ease:'back.out(2)'},9.72);
+          tl.to('#card-d-ico',{scale:1.12,duration:0.45,ease:'sine.inOut',repeat:1,yoyo:true},10.2);
+          sweep('#card-d-sheen',10.0);
+          tl.to(H('card-d'),{opacity:0,scale:0.9,x:-24,duration:0.3,ease:'power2.in'},11.7);
+          tl.set(H('card-d'),{visibility:'hidden'},12.0);
+
+          // ── premium · revelado frosted (entra desenfocado → enfoca) ──
+          tl.fromTo('#card-a-panel',{filter:'blur(14px)'},{filter:'blur(0px)',duration:0.5,ease:'power2.out'},1.0);
+          tl.fromTo('#card-b-panel',{filter:'blur(14px)'},{filter:'blur(0px)',duration:0.5,ease:'power2.out'},4.0);
+          tl.fromTo('#card-c-panel',{filter:'blur(16px)'},{filter:'blur(0px)',duration:0.55,ease:'power2.out'},7.0);
+          tl.fromTo('#card-d-toast',{filter:'blur(12px)'},{filter:'blur(0px)',duration:0.45,ease:'power2.out'},9.5);
+
+          // ── premium · punch-ins sutiles del metraje, sincronizados con los gráficos ──
+          tl.fromTo('#video-wrap',{scale:1},{scale:1.05,duration:0.55,ease:'power2.out'},0.9);
+          tl.to('#video-wrap',{scale:1.0,duration:0.6,ease:'power2.inOut'},3.6);
+          tl.to('#video-wrap',{scale:1.05,duration:0.5,ease:'power2.out'},6.9);
+          tl.to('#video-wrap',{scale:1.0,duration:0.6,ease:'power2.inOut'},9.7);
+
+          // ── subtítulos karaoke (resalta la palabra en amarillo mientras se dice).
+          //    Patrón por palabra:  set display flex → pinta amarillo → vuelve a blanco.
+          //    Rellena con tus tiempos reales de transcript.json. Borra en long-form. ──
+          /* CAPS-JS */
+          tl.set('#capl-0',{display:'flex'},0.20);tl.set('#capl-0',{display:'none'},1.00);
+          tl.to('#capw-0-0',{color:'#FFD400',duration:0.07,ease:'none'},0.24);tl.to('#capw-0-0',{color:'#ffffff',duration:0.10,ease:'none'},0.46);
+          tl.to('#capw-0-1',{color:'#FFD400',duration:0.07,ease:'none'},0.46);tl.to('#capw-0-1',{color:'#ffffff',duration:0.10,ease:'none'},0.70);
+          tl.to('#capw-0-2',{color:'#FFD400',duration:0.07,ease:'none'},0.70);tl.to('#capw-0-2',{color:'#ffffff',duration:0.10,ease:'none'},1.00);
+          tl.set('#capl-1',{display:'flex'},1.00);tl.set('#capl-1',{display:'none'},1.80);
+          tl.to('#capw-1-0',{color:'#FFD400',duration:0.07,ease:'none'},1.04);tl.to('#capw-1-0',{color:'#ffffff',duration:0.10,ease:'none'},1.24);
+          tl.to('#capw-1-1',{color:'#FFD400',duration:0.07,ease:'none'},1.24);tl.to('#capw-1-1',{color:'#ffffff',duration:0.10,ease:'none'},1.48);
+          tl.to('#capw-1-2',{color:'#FFD400',duration:0.07,ease:'none'},1.48);tl.to('#capw-1-2',{color:'#ffffff',duration:0.10,ease:'none'},1.80);
+          /* /CAPS-JS */
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines['graphic-overlays'] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

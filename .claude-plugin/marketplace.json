@@ -1,0 +1,16 @@
+{
+  "name": "origen-editor",
+  "description": "Editor Fantasma — convierte una toma cruda en un vídeo publicable con Claude Code (corte, gráficos premium, subtítulos karaoke y editor visual local).",
+  "owner": { "name": "Daniel García", "email": "d.garcia@baobabmarketing.com" },
+  "plugins": [
+    {
+      "name": "origen-editor",
+      "description": "Sistema de edición de vídeo con Claude: rough cut, overlays premium, subtítulos karaoke y un editor visual tipo CapCut en local.",
+      "version": "1.1.0",
+      "source": "./",
+      "author": { "name": "Daniel García", "email": "d.garcia@baobabmarketing.com" },
+      "homepage": "https://github.com/Danielosongo/origen-editor",
+      "keywords": ["video","editing","hyperframes","overlays","subtitulos","capcut"]
+    }
+  ]
+}

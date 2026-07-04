@@ -1,0 +1,10 @@
+{
+  "name": "origen-editor",
+  "description": "Sistema de edición de vídeo con Claude: rough cut, subtítulos karaoke, overlays premium con sonidos, y un editor visual tipo CapCut en local. Exportar = 1 clic → MP4 final (color neutro, animaciones y sonidos) automáticamente.",
+  "version": "1.1.0",
+  "author": { "name": "Daniel García", "email": "d.garcia@baobabmarketing.com" },
+  "homepage": "https://github.com/Danielosongo/origen-editor",
+  "repository": "https://github.com/Danielosongo/origen-editor",
+  "license": "MIT",
+  "keywords": ["video","editing","hyperframes","overlays","subtitulos","capcut"]
+}

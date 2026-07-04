@@ -1,0 +1,12 @@
+{
+  "_comment": "Subtítulos quemados para formato vertical/corto. Palabras animadas on-beat (skill embedded-captions).",
+  "name": "captions-style",
+  "font": "Cool Vetica (alt: Sora ExtraBold)",
+  "case": "UPPERCASE",
+  "max_words_per_card": 4,
+  "box": { "bg": "#000000", "opacity": 0.9, "radius": 12, "pad": 18 },
+  "text": { "color": "#FFFFFF", "highlight": "#FFC808" },
+  "animation": "words pop in on speech (usa transcript.json, no re-transcribir)",
+  "position": { "explainer": "center", "tiktok-raw": "low-under-face" },
+  "engine": "embedded-captions (HyperFrames) — identidad por defecto 'anchor'"
+}

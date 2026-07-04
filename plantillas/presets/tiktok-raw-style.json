@@ -1,0 +1,9 @@
+{
+  "_comment": "TikTok crudo: tarjeta de hook 1-2s al inicio, luego corte crudo con subtítulos bajos.",
+  "name": "tiktok-raw-style",
+  "aspect": "9:16",
+  "intro": { "hook_card": true, "duration_s": 1.5, "bg": "#0C0909", "accent": "#FFC808" },
+  "body": "corte crudo (rough cut) sin gráficos pesados",
+  "captions_ref": "captions-style",
+  "captions_position": "low-under-face"
+}

@@ -1,0 +1,71 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi sistema de edición con Claude Code</title>
+<style>
+:root{--bg:#0b1020;--card:#141b33;--line:#26304f;--blue:#3b6bff;--cyan:#39d0ff;--ink:#eaf0ff;--mut:#9fb0d6;--gold:#ffb23e;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 700px at 70% -10%,#16224a 0,var(--bg) 55%);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;padding:48px 40px 64px;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto}
+.eyebrow{color:var(--cyan);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px}
+h1{font-size:44px;line-height:1.05;margin:10px 0 6px;font-weight:800}
+h1 span{background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:18px;max-width:760px;margin-bottom:34px}
+.sub b{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:linear-gradient(180deg,var(--card),#111730);border:1px solid var(--line);border-radius:16px;padding:20px 20px 18px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.card.crm::before{background:linear-gradient(90deg,var(--gold),#ff7a3c)}
+.ic{font-size:26px}
+.card h3{font-size:17px;margin:8px 0 4px;display:flex;align-items:center;gap:8px}
+.tag{font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:auto;white-space:nowrap}
+.card p{color:var(--mut);font-size:14px;line-height:1.45}
+.card code{color:var(--cyan);font-size:13px;background:#0c1430;padding:1px 6px;border-radius:6px}
+.crm{grid-column:span 1;box-shadow:0 0 0 1px rgba(255,178,62,.25),0 18px 50px -20px rgba(255,140,60,.4)}
+.crm .tag{color:var(--gold);border-color:rgba(255,178,62,.4)}
+.section{margin-top:40px}
+.section h2{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px}
+.step{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;text-align:center}
+.step .n{font-size:22px}
+.step small{display:block;color:var(--mut);font-size:12.5px;margin-top:4px}
+.arrow{align-self:center;color:var(--blue);font-size:22px;font-weight:800}
+.install{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+.ibox{flex:1;min-width:300px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.ibox h4{font-size:15px;margin-bottom:8px}
+.ibox pre{background:#0c1430;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--cyan);font-size:13px;overflow:auto;white-space:pre-wrap}
+.foot{margin-top:34px;color:var(--mut);font-size:13px;text-align:center}
+</style></head><body><div class="wrap">
+<div class="eyebrow">IA con Daniel García</div>
+<h1>Mi sistema de edición <span>con Claude Code</span></h1>
+<p class="sub">No es un programa. Es <b>una carpeta</b>: el manual + las herramientas que le das a Claude para que edite tus vídeos como tú. <b>Claude es el editor; la carpeta es su mesa.</b></p>
+
+<div class="grid">
+  <div class="card"><div class="ic">🧠</div><h3>CLAUDE.md <span class="tag">el manual</span></h3><p>Cómo edito yo: el método, los cortes, qué sonido lleva cada gráfico, el estilo.</p></div>
+  <div class="card"><div class="ic">🎓</div><h3>skills/ <span class="tag">7 archivos</span></h3><p>Las habilidades de Claude, una por paso: cortar, subtítulos, gráficos, música, export.</p></div>
+  <div class="card"><div class="ic">⌨️</div><h3>commands/ <span class="tag">atajos</span></h3><p>Los comandos que escribes tú: <code>/auto</code>, <code>/editar</code>, <code>/graficos</code>…</p></div>
+  <div class="card crm"><div class="ic">🎨</div><h3>editor-visual/ <span class="tag">EL CRM</span></h3><p>Tu editor visual tipo CapCut, en <b>un solo</b> <code>index.html</code>. Aquí retocas todo lo que Claude edita.</p></div>
+  <div class="card"><div class="ic">⚙️</div><h3>render/ <span class="tag">el motor</span></h3><p>Convierte tu montaje en el MP4 final: color neutro, animaciones y sonidos, con 1 clic.</p></div>
+  <div class="card"><div class="ic">📦</div><h3>INSTALAR.bat <span class="tag">1 doble clic</span></h3><p>Instala todo solo: ffmpeg, el motor y Chrome. Nada que configurar a mano.</p></div>
+  <div class="card"><div class="ic">🧩</div><h3>plantillas/ · biblioteca/ <span class="tag">kit</span></h3><p>Plantillas de gráficos + música de marca y b-roll listos para usar.</p></div>
+  <div class="card"><div class="ic">🔧</div><h3>scripts/ <span class="tag">interno</span></h3><p>El instalador y el vigilante que genera el vídeo al pulsar Exportar.</p></div>
+  <div class="card"><div class="ic">📖</div><h3>GUIA · README · ESTRUCTURA <span class="tag">docs</span></h3><p>La guía y los 2 comandos de instalación. Este mismo esquema, escrito.</p></div>
+</div>
+
+<div class="section"><h2>El flujo — de toma cruda a publicado</h2>
+<div class="flow">
+  <div class="step"><div class="n">🎥</div>Tu clip<small>crudo</small></div><div class="arrow">→</div>
+  <div class="step"><div class="n">✂️</div>Claude corta<small>silencios fuera</small></div><div class="arrow">→</div>
+  <div class="step"><div class="n">💬</div>Subtítulos<small>opcional</small></div><div class="arrow">→</div>
+  <div class="step"><div class="n">✨</div>Gráficos + sonidos<small>tu estilo</small></div><div class="arrow">→</div>
+  <div class="step"><div class="n">🎨</div>El CRM<small>retocas tú</small></div><div class="arrow">→</div>
+  <div class="step"><div class="n">⬇️</div>Exportar<small>MP4 final</small></div>
+</div></div>
+
+<div class="section"><h2>Cómo se instala — 2 clics</h2>
+<div class="install">
+  <div class="ibox"><h4>A · En Claude Code</h4><pre>/plugin marketplace add Danielosongo/origen-editor
+/plugin install origen-editor@origen-editor</pre></div>
+  <div class="ibox"><h4>B · A mano</h4><p style="color:var(--mut);font-size:14px">Descarga la carpeta y ábrela en VS Code o Claude Code de escritorio (arrástrala). Luego <b>doble clic en <code>INSTALAR.bat</code></b> → “Todo listo ✅”.</p></div>
+</div></div>
+
+<div class="foot">Todo centralizado en una carpeta · gratis · se actualiza cada semana — IA con Daniel García</div>
+</div></body></html>

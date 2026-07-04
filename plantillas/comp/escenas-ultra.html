@@ -1,0 +1,218 @@
+<!doctype html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════╗
+  ║  EDITOR FANTASMA · PLANTILLAS ULTRA PRO (gemelas del editor visual)        ║
+  ║                                                                            ║
+  ║  Versión HyperFrames/GSAP premium de cada recurso nuevo del editor:        ║
+  ║  5 escenas a pantalla completa (chapter/list/bigstat/quote/cta),           ║
+  ║  imagen ken-burns fullscreen y texto máquina-de-escribir.                  ║
+  ║                                                                            ║
+  ║  CÓMO SE USA (fase 3/4 del pipeline):                                      ║
+  ║   1) Lee proyecto-editor-fantasma.json exportado del editor.               ║
+  ║   2) Por cada clip kind:"scene"/"image"/enter:"typewriter", copia el       ║
+  ║      bloque correspondiente a projects/<job>/comp/index.html.              ║
+  ║   3) Sustituye textos/tiempos por los del JSON (ver MAPEO-RENDER.md).      ║
+  ║   4) Los media exportados (m*.png/.jpg, music-bg.mp3) van a comp/media/.   ║
+  ║                                                                            ║
+  ║  Contrato: el framework enciende/apaga cada .clip por data-start/duration; ║
+  ║  las animaciones GSAP van SIEMPRE sobre hijos (.scene-wrap, .img-wrap…),   ║
+  ║  nunca sobre el propio .clip.                                              ║
+  ║  Fuentes por CDN (receta de la casa; en render necesita red) o .woff2 en   ║
+  ║  comp/fonts/ con @font-face.                                               ║
+  ╚══════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/gabarito@5/index.css');
+      @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5/index.css');
+      :root{
+        --navy:#14224C; --blue:#2D5BFF; --blue-deep:#1E3FB8; --cyan:#3FE0F0;
+        --orange:#FF6B00; --disp:'Gabarito',sans-serif;
+      }
+      *{box-sizing:border-box;}
+      html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;
+        font-family:'Gabarito','Inter',ui-sans-serif,system-ui,sans-serif;}
+      #stage{position:relative;width:100%;height:100%;overflow:hidden;}
+      /* En un proyecto real, debajo va el <video> del rough cut (ver plantilla index.html). */
+      .demo-bg{position:absolute;inset:0;background:linear-gradient(135deg,#070b18 0%,#14224C 55%,#1E3FB8 130%);}
+
+      /* ══ ESCENAS full-screen (el host .clip cubre TODO el stage; se anima .scene-wrap) ══ */
+      .scene-host{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;}
+      .scene-wrap{position:absolute;inset:0;opacity:0;}
+      .scene-bg{position:absolute;inset:0;}
+      .scene-bg.grad{background:linear-gradient(135deg,#070b18 0%,#14224C 45%,#2D5BFF 130%);}
+      .scene-bg img{width:100%;height:100%;object-fit:cover;display:block;}
+      .scene-bg.blurvid video{width:100%;height:100%;object-fit:cover;filter:blur(16px) brightness(.5) saturate(1.2);transform:scale(1.12);}
+      .scene-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;color:#fff;padding:100px;}
+      .sc-line{opacity:0;}
+      .sc-title{font-family:var(--disp);font-weight:900;font-size:128px;line-height:1.06;letter-spacing:-0.5px;margin:0;text-shadow:0 10px 50px rgba(0,0,0,.5);}
+      .sc-title .w{display:inline-block;opacity:0;}
+      .sc-sub{font-family:'Inter',sans-serif;font-weight:600;font-size:40px;color:rgba(255,255,255,.8);}
+      .sc-item{display:flex;align-items:center;gap:26px;font-family:var(--disp);font-weight:800;font-size:64px;}
+      .sc-item .ck{width:76px;height:76px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(180deg,#5A8BFF,var(--blue-deep));box-shadow:0 14px 40px rgba(45,91,255,.55);font-size:40px;}
+      .sc-big{font-family:var(--disp);font-weight:900;font-size:250px;line-height:1;letter-spacing:-4px;font-variant-numeric:tabular-nums;
+        background:linear-gradient(180deg,#7AA0FF,#3FE0F0);-webkit-background-clip:text;background-clip:text;color:transparent;
+        filter:drop-shadow(0 12px 60px rgba(45,91,255,.55));}
+      .sc-qmark{font-family:var(--disp);font-size:200px;line-height:.4;color:var(--cyan);}
+      .sc-quote{font-family:var(--disp);font-weight:800;font-style:italic;font-size:84px;line-height:1.2;max-width:1400px;}
+      .sc-subbtn{display:inline-flex;align-items:center;gap:18px;background:#FF0033;color:#fff;border-radius:22px;padding:22px 54px;
+        font-family:var(--disp);font-weight:900;font-size:64px;box-shadow:0 20px 60px rgba(255,0,51,.55);}
+      .sc-subbtn svg{width:52px;height:52px;fill:#fff;}
+
+      /* ══ IMAGEN ken-burns fullscreen (se anima .img-wrap y la propia img) ══ */
+      .img-host{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;pointer-events:none;}
+      .img-wrap{position:absolute;inset:0;opacity:0;}
+      .img-wrap .img-fill{position:absolute;inset:0;transform-origin:center center;
+        background:linear-gradient(135deg,#14224C,#2D5BFF);} /* demo; en real: <img src="media/{mediaId}.png"> con object-fit:cover */
+
+      /* ══ TEXTO máquina de escribir ══ */
+      .type-host{position:absolute;pointer-events:none;}
+      .type-wrap{opacity:0;}
+      .type-box{font-family:ui-monospace,Consolas,monospace;font-weight:700;font-size:54px;color:#fff;
+        background:rgba(10,15,28,.82);border:1.5px solid rgba(255,255,255,.2);border-radius:18px;padding:26px 38px;}
+      .type-box .cur{color:var(--cyan);}
+    </style>
+  </head>
+  <body>
+    <div id="stage" class="clip" data-composition-id="escenas-ultra" data-start="0" data-duration="24">
+      <div class="demo-bg"></div>
+
+      <!-- ═ ESCENA · CHAPTER (título palabra a palabra + subtítulo) · editor: sceneKind:"chapter" ═ -->
+      <div class="scene-host clip" id="sc-chapter" data-start="0.4" data-duration="3.6" data-track-index="3">
+        <div class="scene-wrap" id="sc-chapter-w">
+          <div class="scene-bg grad"></div>
+          <div class="scene-inner">
+            <h1 class="sc-line sc-title"><span class="w">EL</span> <span class="w">EDITOR</span> <span class="w">FANTASMA</span></h1>
+            <div class="sc-line sc-sub">capítulo 1 · así funciona</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ ESCENA · LIST (ítems con check que van saliendo) · editor: sceneKind:"list" ═ -->
+      <div class="scene-host clip" id="sc-list" data-start="4.4" data-duration="4.2" data-track-index="3">
+        <div class="scene-wrap" id="sc-list-w">
+          <div class="scene-bg grad"></div>
+          <div class="scene-inner" style="align-items:flex-start;padding-left:360px;">
+            <div class="sc-line sc-item"><span class="ck">✓</span>Corta los silencios</div>
+            <div class="sc-line sc-item"><span class="ck">✓</span>Añade los gráficos</div>
+            <div class="sc-line sc-item"><span class="ck">✓</span>Exporta en 4K</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ ESCENA · BIGSTAT (número gigante count-up) · editor: sceneKind:"bigstat" ═ -->
+      <div class="scene-host clip" id="sc-stat" data-start="9.0" data-duration="3.4" data-track-index="3">
+        <div class="scene-wrap" id="sc-stat-w">
+          <div class="scene-bg grad"></div>
+          <div class="scene-inner">
+            <div class="sc-line sc-big" id="sc-stat-num" data-big="+12.480">+12.480</div>
+            <div class="sc-line sc-sub">palabras transcritas en 2 minutos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ ESCENA · QUOTE (cita; en real con bgMode blurvideo se clona el <video> en .scene-bg) ═ -->
+      <div class="scene-host clip" id="sc-quote" data-start="12.8" data-duration="3.8" data-track-index="3">
+        <div class="scene-wrap" id="sc-quote-w">
+          <div class="scene-bg grad"></div>
+          <div class="scene-inner">
+            <div class="sc-line sc-qmark">“</div>
+            <div class="sc-line sc-quote">La mejor inversión es en ti mismo</div>
+            <div class="sc-line sc-sub">Daniel García</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ ESCENA · CTA (cierre suscríbete) · editor: sceneKind:"cta" ═ -->
+      <div class="scene-host clip" id="sc-cta" data-start="17.0" data-duration="3.4" data-track-index="3">
+        <div class="scene-wrap" id="sc-cta-w">
+          <div class="scene-bg grad"></div>
+          <div class="scene-inner">
+            <h1 class="sc-line sc-title" style="font-size:96px;"><span class="w">¿Te</span> <span class="w">está</span> <span class="w">sirviendo?</span></h1>
+            <div class="sc-line"><span class="sc-subbtn" id="sc-cta-btn"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg>SUSCRÍBETE</span></div>
+            <div class="sc-line sc-sub">y activa la campana 🔔</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ IMAGEN ken-burns fullscreen · editor: kind:"image", fullscreen:true, imgMotion:"kenburns" ═
+           En real: sustituye .img-fill por <img class="img-fill" src="media/{mediaId}.png" style="object-fit:cover"> -->
+      <div class="img-host clip" id="img-kb" data-start="21.0" data-duration="2.8" data-track-index="2">
+        <div class="img-wrap" id="img-kb-w"><div class="img-fill" id="img-kb-img"></div></div>
+      </div>
+
+      <!-- ═ TEXTO máquina de escribir · editor: kind:"text"/"ztext" + enter:"typewriter" ═ -->
+      <div class="type-host clip" id="type-a" data-start="21.4" data-duration="2.2" data-track-index="3" style="left:560px;top:840px;">
+        <div class="type-wrap" id="type-a-w"><div class="type-box"><span id="type-a-txt"></span><span class="cur">▌</span></div></div>
+      </div>
+
+      <script src="vendor/gsap.min.js"></script>
+      <script>
+        (function(){
+          const tl = window.gsap.timeline({ paused:true });
+          const $id = (s)=>document.getElementById(s);
+
+          // helper: escena estándar → fade del WRAP (nunca del .clip) + líneas una a una (stagger = c.stagger del editor)
+          function scene(id,start,dur,stagger){
+            const wrap='#'+id+'-w';
+            tl.fromTo(wrap,{opacity:0},{opacity:1,duration:0.45,ease:'power2.out'},start);
+            tl.fromTo(wrap+' .scene-inner',{scale:1.04},{scale:1,duration:dur,ease:'none'},start);   // micro-zoom sostenido
+            $id(id).querySelectorAll('.sc-line').forEach((ln,i)=>{
+              tl.fromTo(ln,{opacity:0,y:34},{opacity:1,y:0,duration:0.55,ease:'power3.out'},start+0.25+i*stagger);
+            });
+            tl.to(wrap,{opacity:0,duration:0.4,ease:'power2.in'},start+dur-0.4);
+          }
+          // palabras del título (chapter/cta): salen palabra a palabra
+          function words(id,at){
+            $id(id).querySelectorAll('.sc-title .w').forEach((w,i)=>{
+              tl.fromTo(w,{opacity:0,y:26,rotateX:35},{opacity:1,y:0,rotateX:0,duration:0.5,ease:'back.out(1.6)'},at+i*0.12);
+            });
+          }
+
+          scene('sc-chapter',0.4,3.6,0.45); words('sc-chapter',0.65);
+
+          scene('sc-list',4.4,4.2,0.55);
+          $id('sc-list').querySelectorAll('.ck').forEach((c,i)=>tl.fromTo(c,{scale:0},{scale:1,duration:0.45,ease:'back.out(2.2)'},4.75+i*0.55));
+
+          scene('sc-stat',9.0,3.4,0.5);
+          (function(){                                              // count-up conservando prefijo y separador de miles
+            const n=$id('sc-stat-num'),big=n.dataset.big;
+            const m=big.match(/^(\D*)([\d.,]+)([\s\S]*)$/);if(!m)return;
+            const target=parseInt(m[2].replace(/\D/g,''),10),sep=m[2].includes('.')?'.':(m[2].includes(',')?',':'');
+            const st={v:0};
+            tl.to(st,{v:target,duration:1.15,ease:'power2.out',onUpdate:()=>{
+              let out=String(Math.round(st.v));if(sep)out=out.replace(/\B(?=(\d{3})+(?!\d))/g,sep);
+              n.textContent=(m[1]||'')+out+(m[3]||'');
+            }},9.25);
+          })();
+
+          scene('sc-quote',12.8,3.8,0.5);
+
+          scene('sc-cta',17.0,3.4,0.5); words('sc-cta',17.25);
+          tl.fromTo('#sc-cta-btn',{scale:0.4},{scale:1,duration:0.6,ease:'back.out(2)'},17.85);
+          tl.to('#sc-cta-btn',{scale:1.07,duration:0.4,ease:'sine.inOut',repeat:3,yoyo:true},18.6);
+
+          // imagen ken-burns: scale 1→1.08 + pan suave, lineal (driftL/R = solo x; fade = solo el wrap)
+          tl.fromTo('#img-kb-w',{opacity:0},{opacity:1,duration:0.5,ease:'power2.out'},21.0);
+          tl.fromTo('#img-kb-img',{scale:1,x:0},{scale:1.08,x:-24,duration:2.8,ease:'none'},21.0);
+          tl.to('#img-kb-w',{opacity:0,duration:0.35,ease:'power2.in'},23.45);
+
+          // typewriter: progreso 0→1 recorta el texto (seek-safe, sin wall-clock)
+          (function(){
+            const full='claude edita tu vídeo…';
+            const st={p:0},node=$id('type-a-txt');
+            tl.fromTo('#type-a-w',{opacity:0},{opacity:1,duration:0.2,ease:'power2.out'},21.4);
+            tl.to(st,{p:1,duration:0.9,ease:'none',onUpdate:()=>{node.textContent=full.slice(0,Math.round(full.length*st.p));}},21.5);
+            tl.to('#type-a-w',{opacity:0,duration:0.3,ease:'power2.in'},23.3);
+          })();
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines['escenas-ultra'] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

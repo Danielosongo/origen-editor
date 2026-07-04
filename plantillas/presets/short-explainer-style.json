@@ -1,0 +1,9 @@
+{
+  "_comment": "Vertical explicativo: gráficos en la mitad superior, cara en la inferior, subtítulos en medio.",
+  "name": "short-explainer-style",
+  "aspect": "9:16",
+  "layout": { "graphics": "top-half cards", "face": "bottom-half", "captions": "center" },
+  "palette_ref": "signature-style",
+  "graphics": { "card_style": "glass", "accent": "#FF7812" },
+  "captions_ref": "captions-style"
+}

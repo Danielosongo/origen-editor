@@ -1,0 +1,19 @@
+{
+  "_comment": "Correcciones de marca y ortografía que la transcripción suele equivocar. Se aplican a script.md y subtítulos. Amplía la lista según vayan saliendo errores.",
+  "replacements": {
+    "claude": "Claude",
+    "cloud code": "Claude Code",
+    "clawed": "Claude",
+    "hyperframes": "HyperFrames",
+    "hiperfreims": "HyperFrames",
+    "graphify": "Graphify",
+    "origen agency": "Origen Agency",
+    "origen scale": "Origen Scale",
+    "n8n": "n8n",
+    "anthropic": "Anthropic",
+    "danopic": "Anthropic",
+    "whisper": "Whisper",
+    "ffmpeg": "ffmpeg",
+    "ia": "IA"
+  }
+}

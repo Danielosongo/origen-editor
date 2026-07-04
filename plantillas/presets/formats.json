@@ -1,0 +1,30 @@
+{
+  "_comment": "Los 3 formatos. SOLO cambian el paso 3 (gráficos) y el 5 (subtítulos). Por defecto: long-form.",
+  "default": "long-form",
+  "formats": {
+    "long-form": {
+      "aspect": "16:9",
+      "resolution": "1920x1080",
+      "graphics": "signature-style",
+      "captions": "none (YouTube CC)",
+      "thumbnail": "always",
+      "use": "vídeos de YouTube del canal"
+    },
+    "short-explainer": {
+      "aspect": "9:16",
+      "resolution": "1080x1920",
+      "graphics": "short-explainer-style",
+      "captions": "captions-style (centrados, bloqueados)",
+      "thumbnail": "usually skip",
+      "use": "reels/shorts explicativos: gráficos arriba, cara abajo, subtítulos en medio"
+    },
+    "tiktok-raw": {
+      "aspect": "9:16",
+      "resolution": "1080x1920",
+      "graphics": "tiktok-raw-style (tarjeta de hook -> corte crudo)",
+      "captions": "captions-style (bajos, bajo la cara)",
+      "thumbnail": "skip",
+      "use": "TikTok/Shorts estilo crudo con hook"
+    }
+  }
+}

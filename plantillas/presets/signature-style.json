@@ -1,0 +1,34 @@
+{
+  "_comment": "Estilo firma del canal 'IA con Daniel García' para long-form (16:9). NO editar a mano.",
+  "name": "signature-style",
+  "aspect": "16:9",
+  "palette": {
+    "bg": "#0C0909",
+    "accent": "#FF7812",
+    "accent_hi": "#FFC808",
+    "text": "#F8F8F8",
+    "muted": "#9A8C7A"
+  },
+  "fonts": {
+    "display": "Sora",
+    "body": "Inter",
+    "cdn": "https://cdn.jsdelivr.net/fontsource (cargar por CDN, ver SETUP.md)"
+  },
+  "motion": {
+    "transition": "glass + zoom",
+    "ease": "power3.out",
+    "card_in": 0.4,
+    "card_out": 0.3
+  },
+  "graphics": {
+    "lower_third": { "position": "bottom-left", "bg": "rgba(12,9,9,0.85)", "rim": "#FF7812" },
+    "callout": { "style": "glass card", "accent": "#FFC808" },
+    "stat": { "big_number": true, "color": "#FFC808" },
+    "broll_zoom": 1.06
+  },
+  "rules": [
+    "Negro de marca + glow naranja, nunca fondos planos claros.",
+    "Una sola idea por gráfico. Si tapa la cara, va abajo.",
+    "Números/€ siempre en amarillo destacado."
+  ]
+}

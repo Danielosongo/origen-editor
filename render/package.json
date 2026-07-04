@@ -1,0 +1,10 @@
+{
+  "name": "origen-editor-render",
+  "version": "1.0.0",
+  "description": "Motor de export del Origen Editor: render de PARIDAD (captura el CRM entero) + mezcla de SFX. node exportar.mjs <proyecto.json> <video-original> [salida.mp4]",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}
