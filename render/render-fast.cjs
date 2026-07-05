@@ -42,8 +42,8 @@ const TOTAL = Math.round(DUR * FPS);
     "-f", "image2pipe", "-vcodec", "mjpeg", "-framerate", String(FPS), "-i", "-",
     ...(process.env.EF_MUTE_VOICE === "1" ? ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000"] : ["-i", ORIG_AUDIO]),
     "-map", "0:v", "-map", "1:a:0", "-r", String(FPS),
-    "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p",
-    "-c:v", "libx264", "-preset", "medium", "-crf", "14",
+    "-vf", "scale=out_color_matrix=bt709:out_range=tv" + (process.env.EF_SUBS_ASS ? ",ass=" + process.env.EF_SUBS_ASS : "") + ",gradfun=1.5:16,format=yuv420p",   // bt709 + gradfun (anti-banding del degradado)
+    "-c:v", "libx264", "-preset", "slow", "-crf", "12",
     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv",
     ...(process.env.EF_MUTE_VOICE === "1" ? ["-c:a", "aac", "-b:a", "192k"] : ["-c:a", "copy"]),
     "-shortest", OUT], { stdio: ["pipe", "inherit", "inherit"] });

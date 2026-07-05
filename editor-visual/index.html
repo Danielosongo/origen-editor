@@ -25,7 +25,7 @@ body{
     radial-gradient(900px 500px at 12% 0%, rgba(139,92,255,.10), transparent 55%),
     var(--bg);
   color:var(--txt);font-family:'Inter',system-ui,sans-serif;overflow:hidden;
-  display:flex;flex-direction:column;height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;height:100vh;font-size:clamp(12px,0.9vw,14px);-webkit-font-smoothing:antialiased;
 }
 button{font-family:inherit;cursor:pointer;border:none;color:inherit;background:none;}
 .disp{font-family:'Sora',sans-serif;}
@@ -59,7 +59,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .tbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
 
 /* ─── main 3-col ─── */
-.main{flex:1 1 auto;display:grid;grid-template-columns:248px 1fr 300px;min-height:0;}
+.main{flex:1 1 auto;display:grid;grid-template-columns:clamp(184px,14vw,248px) 1fr clamp(230px,17vw,300px);min-height:0;}
 /* modo TEATRO (como YouTube): el vídeo a lo ancho, paneles laterales fuera */
 .main.theater{grid-template-columns:0 1fr 0;}
 .main.theater .col.bin,.main.theater .col.insp{display:none;}
@@ -306,7 +306,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px
 .tag-kind svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
 
 /* ─── timeline ─── */
-.tl{flex:0 0 auto;height:272px;background:linear-gradient(180deg,rgba(11,15,23,.9),rgba(7,10,16,.9));border-top:1px solid var(--line);display:flex;flex-direction:column;}
+.tl{flex:0 0 auto;height:clamp(168px,22vh,272px);background:linear-gradient(180deg,rgba(11,15,23,.9),rgba(7,10,16,.9));border-top:1px solid var(--line);display:flex;flex-direction:column;}
 .tl-top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);}
 .tl-top .ttl{font-family:'Sora';font-weight:800;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);}
 .tl-tools{display:flex;align-items:center;gap:9px;margin-left:auto;}
@@ -458,6 +458,12 @@ header::after{background:linear-gradient(90deg,transparent,rgba(59,107,255,.75),
 .ov .capx.s-neon .cw.on{color:var(--hl,#3FE0F0);text-shadow:0 0 14px var(--hl,#3FE0F0),0 0 36px var(--hl,#3FE0F0),0 2px 6px rgba(0,0,0,.85);}
 .ov .capx.s-clean{background:transparent;padding:0;-webkit-text-stroke:2.2px rgba(8,14,36,.7);}
 .ov .capx.s-shadow{background:transparent;-webkit-text-stroke:0;text-shadow:3px 3px 0 #10203f,0 7px 20px rgba(0,0,0,.65);}
+
+/* === RESPONSIVE UNIVERSAL: encaja en cualquier pantalla (13" MacBook Air, 15", 50"…) sin cortes === */
+.col.bin,.col.insp{overflow-y:auto;}                 /* si un panel no cabe de alto, hace scroll */
+header{padding:clamp(7px,1.1vh,13px) clamp(11px,1.3vw,20px);gap:clamp(9px,1vw,18px);flex-wrap:wrap;}
+.brand h1{font-size:clamp(14px,1.1vw,17px);}
+.tbtn{padding:clamp(6px,0.7vw,10px) clamp(9px,0.85vw,14px);}
 </style>
 </head>
 <body>

@@ -43,7 +43,7 @@ const srcMtime = fs.statSync(SRC).mtimeMs;
 const needBuild = !fs.existsSync(baseIntra) || !fs.existsSync(baseIntra + ".src") || fs.readFileSync(baseIntra + ".src", "utf8") !== SRC + ":" + srcMtime;
 if (needBuild) {
   console.log(`[export] preparando base todo-keyframes ${W}x${H}@${FPS} (una vez por vídeo)...`);
-  run("ffmpeg", ["-y", "-i", SRC, "-an", "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-g", "1", "-keyint_min", "1", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", baseIntra]);
+  run("ffmpeg", ["-y", "-i", SRC, "-an", "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "10", "-g", "1", "-keyint_min", "1", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv", baseIntra]);
   fs.writeFileSync(baseIntra + ".src", SRC + ":" + srcMtime);
 } else console.log("[export] base todo-keyframes en caché ✓");
 const baseUrl = "file:///" + baseIntra.replace(/\\/g, "/").replace(/ /g, "%20");
